@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\V1;
+namespace App\Http\Resources\API\V1;
 
 use App\Enums\Categories;
 use App\Enums\Finishes;
@@ -37,7 +37,7 @@ final class ProductResource extends JsonResource
 
     protected function getLatestPrice(Finishes $finish): ?array
     {
-        $productPrice = ProductPrice::mostRecentForFinish($this->resource, $finish)->first();
+        $productPrice = ProductPrice::mostRecentForFinish($this->resource->id, $finish->value)->first();
 
         if ($productPrice) {
             return [

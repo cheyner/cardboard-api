@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Api\V1\Products\IndexController;
+use App\Http\Controllers\API\V1\Products\IndexController;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
