@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="{{config('app.url')}}" />
 
-    <title>{{config('app.name')}}</title>
+    <title>{{config('app.name')}} | Magic Prices API</title>
 
     @vite('resources/css/app.css')
 

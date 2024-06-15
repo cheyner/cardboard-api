@@ -7,7 +7,7 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="{{config('app.url')}}" />
 
-    <title>{{config('app.name')}}</title>
+    <title>{{config('app.name')}} | Magic Prices API</title>
 
     @vite('resources/css/app.css')
 
@@ -17,7 +17,6 @@
             <h1 class="text-white font-bold text-7xl">Magic Prices API</h1>
             <p class="text-white">Cardboard is a REST API for fetching pricing data for Magic: The Gathering cards</p>
             <a href="{{route('docs')}}" class="bg-white px-2 py-1 rounded shadow">Show Me The Docs</a>
-
         </main>
     </body>
 </html>
