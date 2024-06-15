@@ -27,6 +27,7 @@ final class ProductFactory extends Factory
             'category' => Categories::CARD,
             'franchise' => Franchises::MAGIC,
             'release_id' => Release::factory(),
+            'language' => 'en',
         ];
     }
 }

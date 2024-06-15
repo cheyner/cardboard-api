@@ -22,6 +22,7 @@ return new class() extends Migration
             $table->string('category')->default(Categories::CARD->value);
             $table->string('franchise')->default(Franchises::MAGIC->value);
             $table->string('provider')->default(Providers::SCRYFALL->value);
+            $table->string('language')->nullable();
             $table->text('description')->nullable();
             $table->text('external_id')->nullable();
             $table->text('image_path')->nullable();

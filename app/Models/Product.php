@@ -30,6 +30,7 @@ final class Product extends Model
         'franchise',
         'provider',
         'release_id',
+        'language',
     ];
 
     /** @return array<string,class-string> */
