@@ -1,0 +1,147 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Enums\Categories;
+use App\Enums\Finishes;
+use App\Enums\Franchises;
+use App\Enums\Providers;
+use App\Models\Product;
+use App\Models\ProductPrice;
+use App\Models\Release;
+use Brick\Money\Money;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
+use JsonMachine\Items;
+use Symfony\Component\Console\Attribute\AsCommand;
+
+use function Laravel\Prompts\info;
+
+#[AsCommand(name: 'import:scryfall', description: 'Import All Cards & Prices from Scryfall.')]
+class ImportScryfall extends Command
+{
+    public function handle()
+    {
+        info('Beginning import process from Scryfall');
+
+        info('Getting bulk data objects');
+        $bulks = (Http::get('https://api.scryfall.com/bulk-data')->json());
+
+        info('Fetching all cards link');
+        $allLink = collect($bulks['data'])->filter(fn ($item) => $item['type'] == 'all_cards')?->first()['download_uri'];
+
+        info('Reading all cards from stream');
+        $allCards = Items::fromFile($allLink);
+
+        foreach ($allCards as $id => $card) {
+
+            $this->createProduct(
+                card: $card,
+                franchise: Franchises::MAGIC,
+                category: Categories::CARD,
+                provider: Providers::SCRYFALL
+            );
+
+        }
+    }
+
+    public function createProduct(object $card, Franchises $franchise, Categories $category, Providers $provider): void
+    {
+        // if ($card->lang !== 'en') {
+        //     return;
+        // }
+
+        $product = Product::where('external_id', $card->id)
+            ->where('provider', $provider)
+            ->where('franchise', $franchise)
+            ->withTrashed()
+            ->first();
+
+        if ($product) {
+
+            $this->info("Product {$card->name} already exists");
+
+            $this->createProductPrice(price: $card->prices->usd_foil, product: $product, finish: Finishes::FOIL);
+
+            $this->createProductPrice(price: $card->prices->usd, product: $product, finish: Finishes::NONFOIL);
+
+            $this->createProductPrice(price: $card->prices->usd_etched, product: $product, finish: Finishes::ETCHED);
+
+            $this->importImage($product, $card);
+
+            return;
+        }
+
+        $release = Release::where('name', $card->set_name)->where('code', $card->set)->first();
+
+        if (! $release) {
+            $release = Release::create([
+                'name' => $card->set_name,
+                'code' => $card->set,
+                'external_id' => $card->set_id,
+            ]);
+        }
+
+        $product = Product::create([
+            'franchise' => $franchise,
+            'category' => $category,
+            'provider' => $provider,
+            'release_id' => $release?->id ?? null,
+            'external_id' => $card->id,
+            'name' => $card->name ?? null,
+            'description' => $card->oracle_text ?? null,
+            'language' => $card->lang ?? null,
+        ]);
+
+        if (! $product) {
+            $this->error('Could not create product');
+
+            return;
+        }
+
+        info("Created {$product->name}");
+
+        $this->createProductPrice(price: $card->prices->usd_foil, product: $product, finish: Finishes::FOIL);
+
+        $this->createProductPrice(price: $card->prices->usd, product: $product, finish: Finishes::NONFOIL);
+
+        $this->createProductPrice(price: $card->prices->usd_etched, product: $product, finish: Finishes::ETCHED);
+
+        $this->importImage($product, $card);
+
+    }
+
+    private function createProductPrice($price, Product $product, Finishes $finish)
+    {
+        $amount = self::convertToSmallestUnit($price);
+
+        if (blank($amount)) {
+            return;
+        }
+
+        ProductPrice::create([
+            'price' => $amount,
+            'product_id' => $product->id,
+            'finish' => $finish,
+        ]);
+    }
+
+    private function importImage(Product $product, $card)
+    {
+        //TODO
+
+    }
+
+    public static function convertToSmallestUnit($amount, $currencyCode = 'USD'): ?int
+    {
+        if (blank($amount)) {
+            return null;
+        }
+
+        $money = Money::of($amount, $currencyCode);
+
+        $amountInSmallestUnit = $money->getMinorAmount()->toInt();
+
+        return $amountInSmallestUnit;
+    }
+}
