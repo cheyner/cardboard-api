@@ -1,7 +1,10 @@
 <div class="flex flex-col space-y-2 gap-4" id="login">
     <div class="flex gap-4">
         <x-documentation.section-header>Login</x-documentation.section-header>
-        <x-pill theme="success">POST</x-pill>
+        <div class="flex gap-4 items-center">
+            <x-pill theme="success">POST</x-pill>
+            <x-documentation.endpoint>{{route('login')}}</x-documentation.endpoint>
+        </div>
     </div>
     <x-documentation.section-description>Log in to your account and recieve a Bearer token</x-documentation.section-description>
     <x-documentation.section-subheader>Required Fields</x-documentation.section-subheader>

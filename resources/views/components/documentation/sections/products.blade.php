@@ -3,7 +3,7 @@
         <x-documentation.section-header>Products</x-documentation.section-header>
         <div class="flex gap-4 items-center">
             <x-pill theme="success">Get</x-pill>
-            <x-documentation.endpoint>/api/v1/products</x-documentation.endpoint>
+            <x-documentation.endpoint>{{route('v1:index')}}</x-documentation.endpoint>
         </div>
     </div>
     <x-documentation.section-description>Get a list of products, their UUIDs, and their most recent prices for each finish</x-documentation.section-description>
@@ -40,12 +40,12 @@
             <x-pill>uuids</x-pill>
             <x-documentation.parameter-type>string</x-documentation.parameter-type>
         </div>
-        <x-documentation.parameter-description>The specific uuids to fetch</x-documentation.parameter-description>
+        <x-documentation.parameter-description>A comma-separated string of uuids to fetch</x-documentation.parameter-description>
         <hr />
     </div>
 
     <!-- Example -->
     <x-documentation.code-sample>
-        Http::get('{{config('app.url')}}/api/v1/products?uuids=abc123,def456')->json()
+        Http::get('{{route('v1:index')}}')->json()
     </x-documentation.code-sample>
 </div>

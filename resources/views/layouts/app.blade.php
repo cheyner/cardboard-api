@@ -13,6 +13,8 @@
 
 </head>
     <body class="bg-white text-slate-900 min-h-screen w-screen antialiased flex">
-        Welcome
+        <main>
+            @yield('content')
+        </main>
     </body>
 </html>

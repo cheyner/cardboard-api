@@ -3,7 +3,7 @@
         <x-documentation.section-header>Product</x-documentation.section-header>
         <div class="flex gap-4 items-center">
             <x-pill theme="success">GET</x-pill>
-            <x-documentation.endpoint>/api/v1/product</x-documentation.endpoint>
+            <x-documentation.endpoint>{{route('v1:show',['uuid' => 'abc-123'])}}</x-documentation.endpoint>
         </div>
     </div>
     <x-documentation.section-description>Get the pricing details for an individual product</x-documentation.section-description>
