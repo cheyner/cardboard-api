@@ -23,6 +23,7 @@ final class ProductResource extends JsonResource
             'type' => Categories::CARD->value,
             'attributes' => [
                 'name' => $this->resource->name,
+                'franchise' => $this->franchise,
                 'language' => $this->resource->language,
                 'image_path' => $this->resource->image_path,
                 'set_code' => $this->resource->release->code,
