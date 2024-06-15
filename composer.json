@@ -11,6 +11,7 @@
         "laravel/framework": "^11.10",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "sentry/sentry-laravel": "^4.6",
         "treblle/treblle-laravel": "^4.5"
     },
     "require-dev": {
