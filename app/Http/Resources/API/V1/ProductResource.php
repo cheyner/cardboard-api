@@ -37,7 +37,7 @@ final class ProductResource extends JsonResource
 
     protected function getLatestPrice(Finishes $finish): ?array
     {
-        $productPrice = ProductPrice::mostRecentForFinish($this->resource->id, $finish->value)->first();
+        $productPrice = ProductPrice::mostRecentForFinish($this->resource, $finish)->first();
 
         if ($productPrice) {
             return [
