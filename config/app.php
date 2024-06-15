@@ -69,7 +69,7 @@ return [
     |--------------------------------------------------------------------------
     | This is the amount of items to return from the `/products` endpoints
     */
-    'products_pagination_amount' => env('PRODUCTS_PAGINATION_AMOUNT', 100),
+    'products_pagination_amount' => env('PRODUCTS_PAGINATION_AMOUNT', 50),
 
     /*
     |--------------------------------------------------------------------------
