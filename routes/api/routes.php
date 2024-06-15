@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Treblle\Middlewares\TreblleMiddleware;
 
 Route::get('/status', static fn () => Response::HTTP_OK);
 
@@ -10,7 +11,7 @@ Route::post('login', Auth\LoginController::class)->name('login');
 
 Route::post('register', Auth\RegisterController::class)->name('register');
 
-Route::middleware(['auth:sanctum'])->group(function (): void {
+Route::middleware(['auth:sanctum', TreblleMiddleware::class])->group(function (): void {
 
     Route::get('user', static fn () => request()->user());
 
