@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Console\Commands\ImportScryfall;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Artisan::command(ImportScryfall::class)
+    ->purpose('Import Prices from Scryfall')
+    ->daily()
+    ->at('24:00')
+    ->runInBackground();
