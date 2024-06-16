@@ -28,12 +28,29 @@ class ImportScryfall extends Command
         $bulks = (Http::get('https://api.scryfall.com/bulk-data')->json());
 
         info('Fetching all cards link');
-        $allLink = collect($bulks['data'])->filter(fn ($item) => $item['type'] == 'all_cards')?->first()['download_uri'];
 
-        info('Reading all cards from stream');
-        $allCards = Items::fromFile($allLink);
+        $defaultLink = collect($bulks['data'])->filter(fn ($item) => $item['type'] == 'default_cards')?->first()['download_uri'];
 
-        foreach ($allCards as $id => $card) {
+        $uniqueLink = collect($bulks['data'])->filter(fn ($item) => $item['type'] == 'unique_artwork')?->first()['download_uri'];
+
+        info('Reading default cards from stream');
+
+        $defaultCards = Items::fromFile($defaultLink);
+
+        foreach ($defaultCards as $id => $card) {
+
+            $this->createProduct(
+                card: $card,
+                franchise: Franchises::MAGIC,
+                category: Categories::CARD,
+                provider: Providers::SCRYFALL
+            );
+
+        }
+
+        $uniqueCards = Items::fromFile($uniqueLink);
+
+        foreach ($uniqueCards as $id => $card) {
 
             $this->createProduct(
                 card: $card,
@@ -47,9 +64,9 @@ class ImportScryfall extends Command
 
     public function createProduct(object $card, Franchises $franchise, Categories $category, Providers $provider): void
     {
-        // if ($card->lang !== 'en') {
-        //     return;
-        // }
+        if ($card->lang !== 'en') {
+            return;
+        }
 
         $product = Product::where('external_id', $card->id)
             ->where('provider', $provider)
