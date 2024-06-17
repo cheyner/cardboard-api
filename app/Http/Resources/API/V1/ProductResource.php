@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\API\V1;
 
 use App\Enums\Categories;
+use App\Enums\Currencies;
+use App\Enums\Denominations;
 use App\Enums\Finishes;
 use App\Models\Product;
 use App\Models\ProductPrice;
@@ -28,6 +30,8 @@ final class ProductResource extends JsonResource
                 'image_path' => $this->resource->image_path,
                 'set_code' => $this->resource->release->code,
                 'set_name' => $this->resource->release->name,
+                'currency' => Currencies::USD->value,
+                'denomination' => Denominations::CENTS->value,
                 'latest_prices' => [
                     'nonfoil' => $this->getLatestPrice(Finishes::NONFOIL),
                     'foil' => $this->getLatestPrice(Finishes::FOIL),
