@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "sentry/sentry-laravel": "^4.6",
+        "tempest/highlight": "^2.7",
         "treblle/treblle-laravel": "^4.5"
     },
     "require-dev": {
