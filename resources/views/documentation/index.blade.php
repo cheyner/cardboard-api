@@ -48,6 +48,10 @@
         </div>
 
         <div class="flex flex-col space-y-8">
+            <!-- <section class="space-y-4" id="authentication">
+                <h2 class="text-2xl font-semibold">Quick Start</h2>
+                <x-documentation.sections.quick-start />
+            </section> -->
             <section class="space-y-4" id="authentication">
                 <h2 class="text-2xl font-semibold">Misc.</h2>
                 <x-documentation.sections.misc/>
