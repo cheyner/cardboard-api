@@ -11,6 +11,7 @@ use App\Models\ProductPrice;
 use App\Models\Release;
 use Brick\Money\Money;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use JsonMachine\Items;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -20,12 +21,18 @@ use function Laravel\Prompts\info;
 #[AsCommand(name: 'import:scryfall', description: 'Import All Cards & Prices from Scryfall.')]
 class ImportScryfall extends Command
 {
+
+    public \Illuminate\Database\Eloquent\Collection $known_releases;
+
     public function handle()
     {
+
+        $this->known_releases = Release::all();
+
         info('Beginning import process from Scryfall');
 
         info('Getting bulk data objects');
-        $bulks = (Http::get('https://api.scryfall.com/bulk-data')->json());
+        $bulks = Http::get('https://api.scryfall.com/bulk-data')->json();
 
         info('Fetching all cards link');
 
@@ -76,47 +83,43 @@ class ImportScryfall extends Command
 
         if ($product) {
 
-            $this->info("Product {$card->name} already exists");
+            info("Product {$card->name} already exists");
 
-            $this->createProductPrice(price: $card->prices->usd_foil, product: $product, finish: Finishes::FOIL);
+        } else {
 
-            $this->createProductPrice(price: $card->prices->usd, product: $product, finish: Finishes::NONFOIL);
+            info("Creating Product for {$card->name} {$card->set}");
 
-            $this->createProductPrice(price: $card->prices->usd_etched, product: $product, finish: Finishes::ETCHED);
+            $release = $this->known_releases->where('name', $card->set_name)->where('code', $card->set)->first() ?? null;
+            if (!$release) {
+                info("Creating release for {$card->set_name} ({$card->set})");
+                $release = Release::create(
+                    [
+                        'code' => $card->set,
+                        'name' => $card->set_name,
+                        'external_id' => $card->set_id,
+                    ]
+                );
+                $this->known_releases->push($release);
+            }
 
-            $this->importImage($product, $card);
-
-            return;
-        }
-
-        $release = Release::where('name', $card->set_name)->where('code', $card->set)->first();
-
-        if (! $release) {
-            $release = Release::create([
-                'name' => $card->set_name,
-                'code' => $card->set,
-                'external_id' => $card->set_id,
+            $product = Product::create([
+                'franchise' => $franchise,
+                'category' => $category,
+                'provider' => $provider,
+                'release_id' => $release?->id ?? null,
+                'external_id' => $card->id,
+                'name' => $card->name ?? null,
+                'description' => $card->oracle_text ?? null,
+                'language' => $card->lang ?? null,
             ]);
+
+            if (! $product) {
+                $this->error('Could not create product');
+
+                return;
+            }
+
         }
-
-        $product = Product::create([
-            'franchise' => $franchise,
-            'category' => $category,
-            'provider' => $provider,
-            'release_id' => $release?->id ?? null,
-            'external_id' => $card->id,
-            'name' => $card->name ?? null,
-            'description' => $card->oracle_text ?? null,
-            'language' => $card->lang ?? null,
-        ]);
-
-        if (! $product) {
-            $this->error('Could not create product');
-
-            return;
-        }
-
-        info("Created {$product->name}");
 
         $this->createProductPrice(price: $card->prices->usd_foil, product: $product, finish: Finishes::FOIL);
 
