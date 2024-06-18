@@ -44,6 +44,26 @@
         <hr />
     </div>
 
+    <div class="flex flex-col gap-2 justify-center">
+        <div class="flex gap-2 items-center">
+            <x-pill>provider</x-pill>
+            <x-documentation.parameter-type>string</x-documentation.parameter-type>
+        </div>
+        <x-documentation.parameter-description>Provide this parameter when you want products from a certain provider. Current options are: {{
+                collect(App\Enums\Providers::cases())->map(fn (App\Enums\Providers $provider) => $provider->value)->join(',');
+            }}</x-documentation.parameter-description>
+        <hr />
+    </div>
+
+    <div class="flex flex-col gap-2 justify-center">
+        <div class="flex gap-2 items-center">
+            <x-pill>external_ids</x-pill>
+            <x-documentation.parameter-type>string</x-documentation.parameter-type>
+        </div>
+        <x-documentation.parameter-description>A comma-separated string of external providers to fetch from</x-documentation.parameter-description>
+        <hr />
+    </div>
+
     <!-- Example -->
     <x-documentation.code-sample>
         Http::get('{{route('v1:index')}}')->json()
