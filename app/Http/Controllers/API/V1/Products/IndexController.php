@@ -29,6 +29,12 @@ final class IndexController
                     $query->where('provider', $request->get('provider'));
                 }
             )
+            ->when(
+                value: $request->get('external_ids'),
+                callback: function (Builder $query) use ($request) {
+                    $query->whereIn('external_id', explode(',', $request->get('external_ids')));
+                }
+            )
             ->simplePaginate(
                 perPage: config('app.products_pagination_amount'),
             );
