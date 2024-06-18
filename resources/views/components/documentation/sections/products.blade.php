@@ -60,7 +60,7 @@
             <x-pill>external_ids</x-pill>
             <x-documentation.parameter-type>string</x-documentation.parameter-type>
         </div>
-        <x-documentation.parameter-description>A comma-separated string of external providers to fetch from</x-documentation.parameter-description>
+        <x-documentation.parameter-description>A comma-separated string of external provider ids to fetch from</x-documentation.parameter-description>
         <hr />
     </div>
 
