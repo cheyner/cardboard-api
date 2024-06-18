@@ -11,6 +11,13 @@ use Illuminate\Validation\Rule;
 
 final class ProductsRequest extends FormRequest
 {
+    private ?array $providers = null;
+
+    public function __construct()
+    {
+        $this->providers = collect(Providers::cases())->map(fn (Providers $provider) => $provider->value)->toArray();
+    }
+
     public function authorize(): bool
     {
         return $this->user()->can('viewAny', Product::class);
@@ -21,8 +28,16 @@ final class ProductsRequest extends FormRequest
         return [
             'uuids' => 'nullable|string|max:1000',
             'provider' => [
-                'nullable', 'string', Rule::in(collect(Providers::cases())->map(fn (Providers $provider) => $provider->value)->toArray()),
+                'nullable', 'string', Rule::in($this->providers),
             ],
+            'external_ids' => 'nullable|string|max:2000',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'provider' => 'The provider must be in the following list: '.(implode(',', $this->providers)),
         ];
     }
 }
