@@ -1,0 +1,17 @@
+[
+    {
+        "object": "card",
+        "id": "ggg12345",
+        "name": "Black Lotus",
+        "lang": "en",
+        "set_id": "yyyy1234",
+        "set_name": "Limited Edition Beta",
+        "set": "leb",
+        "oracle_text": "You win.",
+        "prices": {
+            "usd": "500",
+            "usd_foil": "1000",
+            "usd_etched": "1500"
+        }
+    }
+]

@@ -1,0 +1,45 @@
+[
+    {
+        "object": "card",
+        "id": "aaa12345",
+        "name": "Black Lotus",
+        "lang": "en",
+        "set_id": "xxx1234",
+        "set_name": "Limited Edition Alpha",
+        "set": "lea",
+        "oracle_text": "You win.",
+        "prices": {
+            "usd": "0.50",
+            "usd_foil": "1.00",
+            "usd_etched": "1.50"
+        }
+    },{
+        "object": "card",
+        "id": "bbb12345",
+        "name": "Mox Emerald",
+        "lang": "en",
+        "set_id": "xxx1234",
+        "set_name": "Limited Edition Alpha",
+        "set": "lea",
+        "oracle_text": "Good card.",
+        "prices": {
+            "usd": "2.00",
+            "usd_foil": "3.00",
+            "usd_etched": "4.50"
+        }
+    },{
+        "object": "card",
+        "id": "ccc12345",
+        "name": "Ravenous Baloth",
+        "lang": "ja",
+        "set_id": "zzz1234",
+        "set_name": "Onslaught",
+        "set": "m13",
+        "oracle_text": "",
+        "prices": {
+            "usd": "3.00",
+            "usd_foil": "4.00",
+            "usd_etched": "5.50"
+        }
+    }
+]

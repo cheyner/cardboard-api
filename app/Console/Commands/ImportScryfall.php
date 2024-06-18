@@ -11,7 +11,7 @@ use App\Models\ProductPrice;
 use App\Models\Release;
 use Brick\Money\Money;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Http;
 use JsonMachine\Items;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,7 +22,7 @@ use function Laravel\Prompts\info;
 class ImportScryfall extends Command
 {
 
-    public \Illuminate\Database\Eloquent\Collection $known_releases;
+    public Collection $known_releases;
 
     public function handle()
     {
