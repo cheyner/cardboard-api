@@ -22,9 +22,16 @@ final class IndexController
                 column: 'uuid',
                 values: explode(',', $request->get('uuids')),
             ),
-        )->simplePaginate(
-            perPage: config('app.products_pagination_amount'),
-        );
+        )
+            ->when(
+                value: $request->get('provider'),
+                callback: function (Builder $query) use ($request) {
+                    $query->where('provider', $request->get('provider'));
+                }
+            )
+            ->simplePaginate(
+                perPage: config('app.products_pagination_amount'),
+            );
 
         return ProductResource::collection($collection);
     }
